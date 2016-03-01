@@ -20,22 +20,22 @@ for (i in 10:32) {
   x[i]=length(mun[mun$CVE_ENT==i,])
 }
 
-y<-sort.list(sort.list(x))
+#y<-sort.list(sort.list(x))
+y <- round(1000*x/max(x)) 
 
-
-b<-colorRampPalette(c("white","red"))(32)[y]
+b<-colorRampPalette(c("white","red"))(1000)[y]
 
 m <- leaflet() %>%
   addTiles() %>%  
-  addPolygons(data=mun[mun$CVE_ENT=="20",],stroke = T,opacity = .2,popup=dest$NOM_ENT) %>% 
+  addPolygons(data=mun[mun$CVE_ENT=="20",],stroke = T,opacity = .2,popup=mun$NOM_MUN , smoothFactor = 1) %>% 
   addProviderTiles("CartoDB.Positron")
 m 
 
 m <- leaflet() %>%
   addTiles() %>%  
-  addPolygons(data=dest,color = b,stroke = F,popup=dest$NOM_ENT) %>% 
+  addPolygons(data=dest,color = b,stroke = F,fillOpacity = 1,popup=dest$NOM_ENT) %>% 
   addProviderTiles("CartoDB.Positron") %>%
-  addLegend(pal = colorNumeric(palette = colorRampPalette(c("white","red"))(32),domain = 1:32),values =1:32,title = "Cantidad de Municipios")
+  addLegend(pal = colorNumeric(palette = colorRampPalette(c("white","red"))(1000),domain = c(0,1)),values =seq(0,1,length.out = 1000),title = "Cantidad de Municipios")
 
 m 
 
